@@ -1,0 +1,6 @@
+#!/bin/sh
+# Hyprland: report one Ctrl+C to Interpres, except in terminals where Ctrl+C means "interrupt".
+case "$(hyprctl activewindow -j | jq -r .class)" in
+  *ghostty*|*kitty*|*[Aa]lacritty*|*foot*|*wezterm*) exit 0 ;;
+esac
+echo c | socat - "UNIX-CONNECT:${XDG_RUNTIME_DIR:-/tmp}/interpres-copy"
