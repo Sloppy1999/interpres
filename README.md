@@ -31,7 +31,7 @@ The default provider is **local** usesing [Argos Translate](https://github.com/a
 
 ### Optional DeepL provider
 
-Set `provider = "deepl"` in `~/.config/cliptranslate/config.toml` (or `$XDG_CONFIG_HOME/cliptranslate/config.toml`) and restart. Get an **API Free** or Pro key from the **API Keys** tab of a [DeepL API account](https://www.deepl.com/pro-api). Run `export DEEPL_API_KEY="your-key-here"` before starting the app. You can also put `api_key = "..."` in the config file; the environment variable takes precedence. Keep the config file private. In this mode, copied text is sent to DeepL after the double-copy gesture.
+For the Deepl option get an API key from: [DeepL API account](https://www.deepl.com/pro-api) and then set `provider = "deepl"` in `~/.config/cliptranslate/config.toml` (or `$XDG_CONFIG_HOME/cliptranslate/config.toml`).
 
 ## Known limitations
 
