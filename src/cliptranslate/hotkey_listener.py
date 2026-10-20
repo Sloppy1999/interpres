@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import sys
 import time
 from collections.abc import Callable
 
@@ -55,9 +54,7 @@ class GlobalListener:
 
     @staticmethod
     def _is_ctrl(key: object) -> bool:
-        return str(key) in ("Key.ctrl", "Key.ctrl_l", "Key.ctrl_r") or (
-            sys.platform == "darwin" and str(key) in ("Key.cmd", "Key.cmd_l", "Key.cmd_r")
-        )
+        return str(key) in ("Key.ctrl", "Key.ctrl_l", "Key.ctrl_r")
 
     def key_press(self, key: object) -> None:
         if str(key) == "Key.esc":

@@ -1,21 +1,15 @@
-"""Small TOML configuration with platform-specific user directories."""
+"""Small TOML configuration with an XDG user directory."""
 
 from __future__ import annotations
 
 import os
 import re
-import sys
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
 
 def config_dir() -> Path:
-    if sys.platform == "win32":
-        base = Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
-        return base / "ClipTranslate"
-    if sys.platform == "darwin":
-        return Path.home() / "Library" / "Application Support" / "ClipTranslate"
     return Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "cliptranslate"
 
 
