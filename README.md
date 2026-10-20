@@ -1,6 +1,6 @@
 # Interpres (ClipTranslate)
 
-A background translation app for Linux which captures user command (**Ctrl+C twice**) within 500 ms and a popup near the pointer translates the copied text.
+A background translation app for Linux which captures user command (**Ctrl+C twice**) and a popup near the pointer translates the copied text.
 
 ![Interpres demo: double Ctrl+C opens the popup, then the target language is changed](docs/demo.gif)
 
