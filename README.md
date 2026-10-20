@@ -1,6 +1,6 @@
 # Interpres (ClipTranslate)
 
-A background translation app for Linux which captures user command (**Ctrl+C twice**) and a popup near the pointer translates the copied text.
+A Linux-only background translation app which captures user command (**Ctrl+C twice**) and a popup near the pointer translates the copied text.
 
 ![Interpres demo: double Ctrl+C opens the popup, then the target language is changed](docs/demo.gif)
 
@@ -35,7 +35,7 @@ For the Deepl option get an API key from: [DeepL API account](https://www.deepl.
 
 ## Known limitations
 
-- Windows and macOS are not supported for now.
+- Linux only for now: Windows and macOS are not supported.
 - On X11 the global hook works directly. On Wayland only Hyprland is covered, through the binding above; other compositors need their own integration.
 - Short text can be misidentified by the local language detector.
 - Some pairs use English as an intermediate language, which can reduce quality.
