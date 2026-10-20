@@ -1,6 +1,6 @@
 """PyInstaller entry point for the desktop translator."""
 
-from tt_cliptranslate.main import main
+from cliptranslate.main import main
 
 
 if __name__ == "__main__":

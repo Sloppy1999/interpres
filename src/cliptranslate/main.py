@@ -30,8 +30,8 @@ def _setup_logging() -> None:
     folder.mkdir(parents=True, exist_ok=True)
     handler = RotatingFileHandler(folder / "cliptranslate.log", maxBytes=500_000, backupCount=2)
     handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
-    logging.getLogger("tt_cliptranslate").addHandler(handler)
-    logging.getLogger("tt_cliptranslate").setLevel(logging.INFO)
+    logging.getLogger("cliptranslate").addHandler(handler)
+    logging.getLogger("cliptranslate").setLevel(logging.INFO)
     # PyQt6 aborts the process on an unhandled exception in a slot; log it instead.
     sys.excepthook = lambda *exc: logging.getLogger(__name__).error("Unhandled exception", exc_info=exc)
 

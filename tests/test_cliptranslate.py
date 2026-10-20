@@ -6,10 +6,10 @@ from unittest.mock import Mock
 import pytest
 import requests
 
-from tt_cliptranslate.config import AppConfig, save_target_language
-from tt_cliptranslate.hotkey_listener import DoubleCopyDetector, GlobalListener
-from tt_cliptranslate.local_translator import LocalTranslator
-from tt_cliptranslate.translator import (
+from cliptranslate.config import AppConfig, save_target_language
+from cliptranslate.hotkey_listener import DoubleCopyDetector, GlobalListener
+from cliptranslate.local_translator import LocalTranslator
+from cliptranslate.translator import (
     CachedTranslator,
     DeepLTranslator,
     Translation,
@@ -30,7 +30,7 @@ def test_double_copy_timing_and_cooldown() -> None:
 
 def test_double_copy_requires_two_distinct_presses(monkeypatch: pytest.MonkeyPatch) -> None:
     clock = iter((1.0, 1.2))
-    monkeypatch.setattr("tt_cliptranslate.hotkey_listener.time.monotonic", lambda: next(clock))
+    monkeypatch.setattr("cliptranslate.hotkey_listener.time.monotonic", lambda: next(clock))
     triggered = Mock()
     listener = GlobalListener(500, triggered, Mock(), Mock(), Mock())
     ctrl = "Key.ctrl_l"
@@ -154,7 +154,7 @@ def test_key_press_ignored_when_external_trigger_counts(monkeypatch: pytest.Monk
 
 
 def test_wayland_read_uses_wl_paste(monkeypatch: pytest.MonkeyPatch) -> None:
-    from tt_cliptranslate import clipboard
+    from cliptranslate import clipboard
 
     monkeypatch.setenv("WAYLAND_DISPLAY", "wayland-1")
     run = Mock(return_value=SimpleNamespace(stdout="hola"))

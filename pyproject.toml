@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-interpres = "tt_cliptranslate.main:main"
+interpres = "cliptranslate.main:main"
 
 [dependency-groups]
 dev = ["pytest>=8.3"]
