@@ -60,4 +60,4 @@ Logs rotate in `~/.config/cliptranslate/cliptranslate.log`. They record operatio
 
 ## License
 
-MIT, see `LICENSE`.
+MIT, see [LICENSE](LICENSE).
