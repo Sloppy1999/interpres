@@ -1,4 +1,4 @@
-# Interpres (ClipTranslate)
+# Interpres
 
 A Linux-only background translation app which captures user command (**Ctrl+C twice**) and a popup near the pointer translates the copied text.
 
