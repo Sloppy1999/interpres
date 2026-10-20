@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "interpres"
+version = "0.1.0"
+description = "Local desktop translation on a double-copy gesture"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "PyQt6>=6.11",
+    "pynput>=1.7,<2",
+    "requests>=2.33",
+    "argostranslate>=1.11,<2",
+    "py3langid>=0.4,<1",
+]
+
+[project.scripts]
+interpres = "tt_cliptranslate.main:main"
+
+[dependency-groups]
+dev = ["pytest>=8.3"]
+
+[tool.uv]
+# The pinned Argos version uses MiniSBD; Stanza and spaCy are optional at runtime.
+exclude-dependencies = [
+    { package = { name = "argostranslate" }, dependencies = ["stanza", "spacy"] },
+]
+
+[tool.uv.sources]
+# This upstream commit makes Stanza and spaCy imports optional.
+argostranslate = { git = "https://github.com/argosopentech/argos-translate.git", rev = "17ed1a9b055c5ba1b51d76b683bbb0c64e2a4a88" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
