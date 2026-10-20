@@ -1,0 +1,11 @@
+[Unit]
+Description=Interpres double-copy translator
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/interpres
+Restart=on-failure
+
+[Install]
+WantedBy=graphical-session.target

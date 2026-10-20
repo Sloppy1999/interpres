@@ -1,0 +1,26 @@
+# Maintainer: Sergio Peral <sergioperalgarijo99@gmail.com>
+pkgname=interpres
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Local translation popup on double Ctrl+C (Hyprland/Omarchy)'
+arch=('x86_64')
+url='https://github.com/Sloppy1999/interpres'
+license=('MIT')
+depends=('python' 'qt6-base' 'wl-clipboard' 'socat' 'jq' 'hyprland')
+makedepends=('git' 'uv')
+options=('!strip')
+source=("git+$url.git")
+sha256sums=('SKIP')
+
+package() {
+  cd "$srcdir/interpres"
+  # The venv is built straight into $pkgdir, so its absolute paths are rewritten afterwards.
+  UV_PROJECT_ENVIRONMENT="$pkgdir/opt/interpres/venv" uv sync --frozen --no-dev --no-editable --python /usr/bin/python --no-python-downloads
+  grep -rIl "$pkgdir" "$pkgdir/opt/interpres/venv" | xargs -r sed -i "s|$pkgdir||g"
+  rm -f "$pkgdir"/opt/interpres/venv/lib/python*/site-packages/*.dist-info/direct_url.json
+  install -d "$pkgdir/usr/bin"
+  ln -s /opt/interpres/venv/bin/interpres "$pkgdir/usr/bin/interpres"
+  install -Dm755 scripts/interpres-trigger "$pkgdir/usr/bin/interpres-trigger"
+  install -Dm644 packaging/interpres.service "$pkgdir/usr/lib/systemd/user/interpres.service"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

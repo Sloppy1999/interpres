@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Local desktop translation on a double-copy gesture"
 readme = "README.md"
 requires-python = ">=3.12"
+license = "MIT"
 dependencies = [
     "PyQt6>=6.11",
     "pynput>=1.7,<2",

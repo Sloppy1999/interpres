@@ -4,7 +4,20 @@ A small background translation app for Linux. Select text in another app, press 
 
 ![Interpres demo: double Ctrl+C opens the popup, then the target language is changed](docs/demo.gif)
 
-## Setup
+## Install on Arch / Omarchy
+
+Build and install the package from this repo (needs `git` and `uv`):
+
+```bash
+git clone https://github.com/Sloppy1999/interpres.git
+cd interpres/packaging
+makepkg -si
+systemctl --user enable --now interpres
+```
+
+Then add the Hyprland binding from the Wayland section below, using the installed command `interpres-trigger`. The service starts the app on login.
+
+## Setup (from source)
 
 Install Python 3.12+, [uv](https://docs.astral.sh/uv/), and Git. From this directory:
 
@@ -28,10 +41,12 @@ Set `provider = "deepl"` in `~/.config/cliptranslate/config.toml` (or `$XDG_CONF
 Global key hooks (pynput) only see XWayland windows. On Hyprland, add this to `~/.config/hypr/bindings.lua`; it reports every Ctrl+C to the app (the key still reaches your app, and terminals are skipped). Needs `socat`, `jq` and `wl-clipboard`:
 
 ```lua
-o.bind("CTRL + C", "Interpres", "/path/to/interpres/scripts/interpres-trigger", { non_consuming = true })
+o.bind("CTRL + C", "Interpres", "interpres-trigger", { non_consuming = true })
 ```
 
 The app listens on `$XDG_RUNTIME_DIR/interpres-copy`. Only one instance runs at a time.
+
+Using a source checkout instead of the package? Point the binding at `scripts/interpres-trigger` with its full path.
 
 ## Known limitations
 
@@ -42,3 +57,7 @@ The app listens on `$XDG_RUNTIME_DIR/interpres-copy`. Only one instance runs at 
 - Local models are downloaded over HTTPS from the public Argos package index, which publishes no checksums, so they are not integrity-checked.
 
 Logs rotate in `~/.config/cliptranslate/cliptranslate.log`. They record operational failures without clipboard text or API keys.
+
+## License
+
+MIT, see `LICENSE`.
