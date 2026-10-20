@@ -100,4 +100,6 @@ def save_target_language(language: str, path: Path | None = None) -> None:
     updated, count = re.subn(pattern, replacement, content, count=1)
     if not count:
         updated = content.rstrip("\n") + "\n" + replacement + "\n"
-    path.write_text(updated, encoding="utf-8")
+    temporary = path.with_suffix(".tmp")
+    temporary.write_text(updated, encoding="utf-8")
+    temporary.replace(path)

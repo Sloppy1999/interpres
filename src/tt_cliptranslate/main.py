@@ -10,7 +10,7 @@ from concurrent.futures import CancelledError, Future, ThreadPoolExecutor
 from logging.handlers import RotatingFileHandler
 
 from PyQt6.QtCore import QObject, Qt, QTimer, QUrl, pyqtSignal
-from PyQt6.QtNetwork import QLocalServer
+from PyQt6.QtNetwork import QLocalServer, QLocalSocket
 from PyQt6.QtGui import QColor, QCursor, QDesktopServices, QIcon, QPainter, QPixmap
 from PyQt6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 
@@ -22,7 +22,7 @@ from .translator import CachedTranslator, DeepLTranslator, Translation, Translat
 from .ui.popup import LANGUAGES, LOCAL_LANGUAGES, TranslationPopup
 
 
-SOCKET_NAME = "interpres-copy"
+SOCKET_NAME = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "interpres-copy")
 
 
 def _setup_logging() -> None:
@@ -112,8 +112,7 @@ class AppController(QObject):
             self.signals.escaped.emit,
             self.signals.error.emit,
         )
-        # Wayland hides global keys from pynput; the compositor reports them via --trigger.
-        self.listener.count_copy = not os.environ.get("WAYLAND_DISPLAY")
+        # Wayland hides global keys from pynput; a compositor binding reports each Ctrl+C here.
         QLocalServer.removeServer(SOCKET_NAME)
         self.server = QLocalServer(self)
         self.server.newConnection.connect(self._on_trigger_socket)
@@ -126,8 +125,16 @@ class AppController(QObject):
 
     def _on_trigger_socket(self) -> None:
         conn = self.server.nextPendingConnection()
-        conn.readyRead.connect(conn.readAll)
         conn.disconnected.connect(conn.deleteLater)
+        conn.readyRead.connect(lambda: self._on_press(conn))
+
+    def _on_press(self, conn: QLocalSocket) -> None:
+        if not conn.readAll():
+            return
+        if self.listener.count_copy:
+            # First compositor report: stop pynput counting so XWayland presses are not doubled.
+            self.listener.count_copy = False
+            self.listener.detector.reset()
         if self.listener.detector.press(time.monotonic()):
             self.signals.triggered.emit()
 
@@ -259,6 +266,10 @@ class AppController(QObject):
 
     def on_hook_error(self, message: str) -> None:
         self.hook_watchdog.stop()
+        if os.environ.get("WAYLAND_DISPLAY"):
+            # pynput may be unavailable on Wayland; the compositor trigger still works.
+            logging.getLogger(__name__).info("%s", message)
+            return
         self.enabled_action.setChecked(False)
         logging.getLogger(__name__).warning("%s", message)
         self.tray.showMessage("ClipTranslate", message)
@@ -283,6 +294,11 @@ def main() -> int:
     if config.provider not in ("local", "deepl"):
         print(f"Unsupported provider: {config.provider}", file=sys.stderr)
         return 2
+    probe = QLocalSocket()
+    probe.connectToServer(SOCKET_NAME)
+    if probe.waitForConnected(200):
+        print("ClipTranslate is already running.", file=sys.stderr)
+        return 0
     app = QApplication(sys.argv)
     app.setApplicationName("ClipTranslate")
     app.setQuitOnLastWindowClosed(False)

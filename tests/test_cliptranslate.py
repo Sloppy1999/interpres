@@ -139,3 +139,26 @@ def test_local_translator_can_use_installed_english_pivot() -> None:
     local = LocalTranslator(False, package_api=package, translate_api=engine, detector=detector)
     assert local.translate("Guten Morgen", "FR").text == "Bonjour"
     assert engine.translate.call_count == 2
+
+
+def test_key_press_ignored_when_external_trigger_counts(monkeypatch: pytest.MonkeyPatch) -> None:
+    fired = []
+    listener = GlobalListener(500, lambda: fired.append(1), Mock(), Mock(), Mock())
+    listener.count_copy = False
+    copy = SimpleNamespace(char="c", vk=67)
+    for _ in range(2):
+        listener.key_press("Key.ctrl")
+        listener.key_press(copy)
+        listener.key_release(copy)
+    assert fired == []
+
+
+def test_wayland_read_uses_wl_paste(monkeypatch: pytest.MonkeyPatch) -> None:
+    from tt_cliptranslate import clipboard
+
+    monkeypatch.setenv("WAYLAND_DISPLAY", "wayland-1")
+    run = Mock(return_value=SimpleNamespace(stdout="hola"))
+    monkeypatch.setattr(clipboard.subprocess, "run", run)
+    assert clipboard.read_text() == "hola"
+    run.side_effect = OSError
+    assert clipboard.read_text() is None

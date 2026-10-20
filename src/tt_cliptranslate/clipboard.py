@@ -15,7 +15,7 @@ def read_text() -> str | None:
         try:
             text = subprocess.run(
                 ["wl-paste", "--no-newline", "--type", "text"],
-                capture_output=True, text=True, timeout=2, check=True,
+                capture_output=True, text=True, timeout=0.5, check=True,
             ).stdout
         except (OSError, subprocess.SubprocessError):
             return None

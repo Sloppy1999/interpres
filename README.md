@@ -73,3 +73,15 @@ The executable is placed in `dist/Interpres.exe`. Model packs are stored separat
 - The app does not restore clipboard history or copy a translation automatically. A future settings UI could also replace editing the TOML file.
 
 Logs rotate in the same user config directory as `cliptranslate.log`. They record operational failures without clipboard text or API keys.
+
+## Linux / Wayland
+
+Global key hooks (pynput) only see XWayland windows. On Hyprland, add this to `~/.config/hypr/bindings.lua`; it reports every Ctrl+C to the app (the key still reaches your app, and terminals are skipped). Needs `socat`, `jq` and `wl-clipboard`:
+
+```lua
+o.bind("CTRL + C", "Interpres", "/path/to/interpres/scripts/interpres-trigger", { non_consuming = true })
+```
+
+The app listens on `$XDG_RUNTIME_DIR/interpres-copy`. Only one instance runs at a time.
+
+Local models are downloaded over HTTPS from the public Argos package index, which publishes no checksums, so they are not integrity-checked.
