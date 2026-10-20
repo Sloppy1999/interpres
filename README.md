@@ -2,6 +2,13 @@
 
 A small background translation app for Windows 10/11. Select text in another app, press **Ctrl+C twice** within 500 ms, and a popup near the pointer translates the copied text. The keystrokes are observed rather than intercepted, so the source app still performs its normal copy operation. The popup has a selectable translation, the detected source language, a collapsible original, a target language chooser, and an explicit **Copy translation** button.
 
+<p>
+  <img src="docs/popup-english.png" alt="English text translated to Spanish in the popup" width="430">
+  <img src="docs/popup-german.png" alt="German text detected and translated to Spanish" width="430">
+</p>
+
+The popup shows the detected source language, a target language chooser, the selectable translation, a collapsible original text, and a **Copy translation** button.
+
 ## Setup
 
 Install Python 3.12+, [uv](https://docs.astral.sh/uv/), and Git. From this directory:
