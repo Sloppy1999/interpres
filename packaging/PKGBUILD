@@ -9,7 +9,7 @@ license=('MIT')
 depends=('python' 'qt6-base' 'wl-clipboard' 'socat' 'jq' 'hyprland')
 makedepends=('git' 'uv')
 options=('!strip')
-source=("git+$url.git")
+source=("git+$url.git#tag=v$pkgver")
 sha256sums=('SKIP')
 
 package() {
